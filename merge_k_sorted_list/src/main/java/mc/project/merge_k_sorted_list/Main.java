@@ -58,4 +58,41 @@ public class Main {
         }
         return minNodeIndex;
     }
+
+    public static ListNode mergeKLists2(ListNode[] lists) {
+        return partition(lists, 0, lists.length - 1);
+    }
+
+    private static ListNode partition(ListNode[] lists, int start, int end) {
+        if (start == end) return lists[start];
+        if (start < end) {
+            int middle = (start + end) / 2;
+            ListNode left = partition(lists, start, middle);
+            ListNode right = partition(lists, middle + 1, end);
+            return merge(left, right);
+        }
+        return null;
+    }
+
+    private static ListNode merge(ListNode left, ListNode right) {
+        ListNode returnNode = new ListNode();
+        ListNode currentNode = returnNode;
+
+        while(left != null && right != null) {
+            if (left.val < right.val) {
+                currentNode.next = left;
+                left = left.next;
+            } else {
+                currentNode.next = right;
+                right = right.next;
+            }
+            currentNode = currentNode.next;
+        }
+        if (left != null) {
+            currentNode.next = left;
+        } else {
+            currentNode.next = right;
+        }
+        return returnNode.next;
+    }
 }
