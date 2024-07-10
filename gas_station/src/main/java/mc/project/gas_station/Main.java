@@ -1,0 +1,33 @@
+package mc.project.gas_station;
+
+/*
+There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
+
+You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. You begin the journey with an empty tank at one of the gas stations.
+
+Given two integer arrays gas and cost, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1. If there exists a solution, it is guaranteed to be unique
+ */
+public class Main {
+    public static void main(String[] args) {
+
+    }
+
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int sum = 0;
+        int currentSum = 0;
+        int result = -1;
+        for (int i = gas.length - 1; i >= 0; i--) {
+            int difference = gas[i] - cost[i];
+            sum += difference;
+            currentSum += difference;
+            if (currentSum >= 0) {
+                result = i;
+                currentSum = 0;
+            }
+        }
+        if (sum < 0) {
+            return -1;
+        }
+        return result;
+    }
+}
