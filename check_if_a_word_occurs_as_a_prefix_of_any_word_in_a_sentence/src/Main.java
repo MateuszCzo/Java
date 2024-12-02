@@ -9,37 +9,45 @@ public class Main {
         System.out.println(isPrefixOfWord("i love eating burger", "i love eating burger"));
     }
 
-    public static int isPrefixOfWord(String sentence, String searchWord) {
-        int wordCount = 1;
-
-        if (samePrefix(sentence, 0, searchWord)) {
-            return wordCount;
-        }
-
-        for (int i = 0; i < sentence.length(); i++) {
-            if (sentence.charAt(i) == ' ') {
-                wordCount++;
-                if (samePrefix(sentence, i + 1, searchWord)) {
-                    return wordCount;
-                }
-            }
-        }
-
-        return -1;
+    public static class Node {
+        Node[] next = new Node[25];
+        int index;
     }
 
-    private static boolean samePrefix(String sentence, int start, String searchWord) {
-        int searchIndex = 0;
-        for (int i = start; i < sentence.length(); i++) {
-            if (sentence.charAt(i) == searchWord.charAt(searchIndex)) {
-                searchIndex++;
-                if (searchIndex == searchWord.length()) {
-                    return true;
-                }
-            } else {
-                return false;
+    public static int isPrefixOfWord(String sentence, String searchWord) {
+        Node rootNode = new Node();
+        Node currNode = rootNode;
+        int wordCount = 1;
+
+        for (int i = 0; i < sentence.length(); i++) {
+            char currChar = sentence.charAt(i);
+            if (currChar == ' ') {
+                wordCount++;
+                currNode = rootNode;
+                continue;
+            }
+            int nextNodeIndex = currChar - 'a';
+            Node nextNode = currNode.next[nextNodeIndex];
+            if (nextNode == null) {
+                nextNode = new Node();
+                currNode.next[nextNodeIndex] = nextNode;
+            }
+            currNode = nextNode;
+            if (currNode.index == 0) {
+                currNode.index = wordCount;
             }
         }
-        return false;
+
+        currNode = rootNode;
+        for (int i = 0; i < searchWord.length(); i++) {
+            int nextNodeIndex = searchWord.charAt(i) - 'a';
+            Node nextNode = currNode.next[nextNodeIndex];
+            if (nextNode == null) {
+                return -1;
+            }
+            currNode = nextNode;
+        }
+
+        return currNode.index;
     }
 }
