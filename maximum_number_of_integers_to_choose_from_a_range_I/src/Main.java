@@ -30,7 +30,7 @@ public class Main {
                 continue;
             }
             currentSum += i;
-            if (currentSum >= maxSum) {
+            if (currentSum > maxSum) {
                 return count;
             }
             count++;
